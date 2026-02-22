@@ -1,0 +1,88 @@
+---
+title: "Understanding TypeScript Generics"
+description: "Master TypeScript generics with practical examples and patterns for writing reusable, type-safe code."
+date: 2026-02-12
+branch: "frontend"
+tags: ["typescript", "generics", "patterns"]
+hash: "b3a4c5d"
+readingTime: 7
+---
+
+## Why Generics?
+
+Generics allow you to write flexible, reusable code while maintaining type safety.
+
+## Basic Generic Function
+
+```typescript
+function identity<T>(arg: T): T {
+  return arg;
+}
+
+const str = identity<string>("hello");
+const num = identity(42);
+```
+
+## Generic Interfaces
+
+```typescript
+interface ApiResponse<T> {
+  data: T;
+  status: number;
+  message: string;
+}
+
+type UserResponse = ApiResponse<User>;
+type PostsResponse = ApiResponse<Post[]>;
+```
+
+## Generic Constraints
+
+```typescript
+interface HasLength {
+  length: number;
+}
+
+function logLength<T extends HasLength>(item: T): void {
+  console.log(item.length);
+}
+
+logLength("hello");
+logLength([1, 2, 3]);
+```
+
+## Utility Types
+
+```typescript
+type Partial<T> = {
+  [P in keyof T]?: T[P];
+};
+
+type Pick<T, K extends keyof T> = {
+  [P in K]: T[P];
+};
+
+type UserPreview = Pick<User, 'id' | 'name'>;
+```
+
+## Generic Classes
+
+```typescript
+class Storage<T> {
+  private items: T[] = [];
+
+  add(item: T): void {
+    this.items.push(item);
+  }
+
+  getAll(): T[] {
+    return [...this.items];
+  }
+}
+
+const userStorage = new Storage<User>();
+```
+
+## Conclusion
+
+Generics are a powerful tool for creating reusable, type-safe abstractions in TypeScript.

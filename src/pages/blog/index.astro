@@ -1,0 +1,44 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CommitCard from '../../components/blog/CommitCard.astro';
+import BranchNav from '../../components/blog/BranchNav.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog'))
+  .filter((post) => !post.data.draft)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const branches = [...new Set(posts.map((post) => post.data.branch))];
+const url = Astro.url;
+const activeBranch = url.searchParams.get('b') || 'all';
+
+const filteredPosts = activeBranch === 'all' 
+  ? posts 
+  : posts.filter((post) => post.data.branch === activeBranch);
+---
+
+<BaseLayout title="blog" description="All commits (blog posts)">
+  <div class="mb-10">
+    <div class="flex items-center gap-3 mb-3">
+      <span class="text-accent-green text-xl">$</span>
+      <h1 class="text-2xl font-bold text-text-primary">git log</h1>
+    </div>
+    <p class="text-text-secondary text-lg">
+      {activeBranch === 'all' ? 'Showing all commits' : `Showing commits on branch: ${activeBranch}`}
+    </p>
+  </div>
+
+  <BranchNav branches={branches} activeBranch={activeBranch} />
+
+  <div class="space-y-6">
+    {filteredPosts.map((post) => (
+      <CommitCard post={post} />
+    ))}
+  </div>
+
+  {filteredPosts.length === 0 && (
+    <div class="text-center py-16 text-text-muted">
+      <p class="text-lg">No commits found on this branch.</p>
+    </div>
+  )}
+</BaseLayout>

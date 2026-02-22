@@ -1,0 +1,63 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CommitCard from '../../components/blog/CommitCard.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  const branches = [...new Set(posts.map((post) => post.data.branch))];
+  
+  return branches.map((branch) => ({
+    params: { branch },
+    props: {
+      branch,
+      posts: posts
+        .filter((post) => post.data.branch === branch && !post.data.draft)
+        .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf()),
+    },
+  }));
+}
+
+const { branch, posts } = Astro.props;
+
+const branchColors: Record<string, string> = {
+  main: 'text-accent-green',
+  frontend: 'text-accent-blue',
+  backend: 'text-accent-purple',
+  devops: 'text-accent-cyan',
+};
+
+const branchDescriptions: Record<string, string> = {
+  main: 'General topics & miscellaneous',
+  frontend: 'UI, client-side development',
+  backend: 'Server, APIs, databases',
+  devops: 'Infrastructure, deployment, CI/CD',
+};
+---
+
+<BaseLayout title={branch} description={`Posts in ${branch} category`}>
+  <div class="mb-10">
+    <div class="flex items-center gap-3 mb-3">
+      <span class="text-accent-green text-xl">$</span>
+      <h1 class="text-2xl font-bold text-text-primary">git log <span class={branchColors[branch] || ''}>{branch}</span></h1>
+    </div>
+    <p class="text-text-secondary text-lg">{branchDescriptions[branch] || 'Posts in this category'}</p>
+  </div>
+
+  <a href="/branches" class="inline-flex items-center gap-2 text-text-secondary hover:text-accent-blue transition-colors mb-8">
+    <span>←</span>
+    <span>View all branches</span>
+  </a>
+
+  {posts.length > 0 ? (
+    <div class="space-y-6">
+      {posts.map((post) => (
+        <CommitCard post={post} />
+      ))}
+    </div>
+  ) : (
+    <div class="text-center py-16 text-text-muted">
+      <p class="text-lg">No commits found on this branch.</p>
+    </div>
+  )}
+</BaseLayout>

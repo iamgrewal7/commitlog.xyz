@@ -1,0 +1,76 @@
+---
+title: "Building RESTful APIs with Node.js and Express"
+description: "A comprehensive guide to building production-ready REST APIs using Node.js and Express framework, covering routing, middleware, error handling, and best practices."
+date: 2026-02-20
+branch: "backend"
+tags: ["node", "express", "api", "rest"]
+hash: "a1b2c3d"
+readingTime: 8
+---
+
+## Introduction
+
+Building robust REST APIs is a fundamental skill for backend developers. In this post, we'll explore how to create a production-ready API using Node.js and Express.
+
+## Setting Up the Project
+
+First, let's initialize our project:
+
+```bash
+mkdir my-api && cd my-api
+npm init -y
+npm install express cors helmet
+```
+## Basic Server Setup
+
+```javascript
+import express from 'express';
+import cors from 'cors';
+import helmet from 'helmet';
+
+const app = express();
+
+app.use(helmet());
+app.use(cors());
+app.use(express.json());
+
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok' });
+});
+
+app.listen(3000, () => {
+  console.log('Server running on port 3000');
+});
+```
+## Structuring Routes
+
+Organize your routes in separate files:
+
+```javascript
+// routes/users.js
+import { Router } from 'express';
+
+const router = Router();
+
+router.get('/', getUsers);
+router.get('/:id', getUser);
+router.post('/', createUser);
+router.put('/:id', updateUser);
+router.delete('/:id', deleteUser);
+
+export default router;
+```
+## Error Handling Middleware
+
+```javascript
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({
+    error: 'Something went wrong!',
+    message: process.env.NODE_ENV === 'development' ? err.message : undefined
+  });
+});
+```
+## Conclusion
+
+Following these patterns will help you build maintainable and scalable APIs. Remember to always validate input, handle errors gracefully, and document your endpoints.

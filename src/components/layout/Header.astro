@@ -1,0 +1,46 @@
+---
+import SearchBar from '../search/SearchBar.astro';
+
+const navItems = [
+  { href: '/', label: '~' },
+  { href: '/blog', label: 'log' },
+  { href: '/branches', label: 'branches' },
+  { href: '/tags', label: 'tags' },
+  { href: '/about', label: 'about' },
+];
+---
+
+<header class="border-b border-border py-4">
+  <div class="max-w-4xl mx-auto px-4 flex items-center justify-between gap-4">
+    <a href="/" class="flex items-center gap-2 text-text-primary hover:text-accent-green transition-colors shrink-0">
+      <span class="text-accent-green">$</span>
+      <span class="font-bold">commitlog.xyz</span>
+    </a>
+    <div class="flex items-center gap-2">
+      <SearchBar />
+      <nav class="hidden md:flex items-center gap-1">
+        {navItems.map((item) => (
+          <a
+            href={item.href}
+            class="px-3 py-1 text-sm text-text-secondary hover:text-text-primary hover:bg-bg-tertiary rounded transition-colors"
+          >
+            {item.label}
+          </a>
+        ))}
+      </nav>
+    </div>
+  </div>
+</header>
+
+<header class="md:hidden border-b border-border">
+  <nav class="max-w-4xl mx-auto px-4 py-2 flex items-center gap-1 overflow-x-auto">
+    {navItems.map((item) => (
+      <a
+        href={item.href}
+        class="px-3 py-1 text-sm text-text-secondary hover:text-text-primary hover:bg-bg-tertiary rounded transition-colors whitespace-nowrap"
+      >
+        {item.label}
+      </a>
+    ))}
+  </nav>
+</header>

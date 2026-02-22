@@ -1,0 +1,84 @@
+---
+import { Command } from '@pagefind/default-ui';
+
+const isDev = import.meta.env.DEV;
+---
+
+<div id="search" class="search-container">
+  <button 
+    id="search-trigger"
+    class="flex items-center gap-2 px-3 py-1.5 text-sm text-text-secondary bg-bg-secondary border border-border rounded hover:border-text-secondary transition-colors"
+    aria-label="Search"
+  >
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+    </svg>
+    <span>Search</span>
+    <kbd class="hidden md:inline px-1.5 py-0.5 text-xs bg-bg-tertiary rounded">/</kbd>
+  </button>
+</div>
+
+<div id="search-modal" class="fixed inset-0 z-50 hidden">
+  <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" id="search-backdrop"></div>
+  <div class="relative z-10 max-w-2xl mx-auto mt-20 p-4">
+    <div class="bg-bg-secondary border border-border rounded-lg overflow-hidden shadow-2xl">
+      <div id="pagefind-search"></div>
+    </div>
+  </div>
+</div>
+
+<style>
+  :global(body.search-open) {
+    overflow: hidden;
+  }
+</style>
+
+<script>
+  const trigger = document.getElementById('search-trigger');
+  const modal = document.getElementById('search-modal');
+  const backdrop = document.getElementById('search-backdrop');
+  const searchContainer = document.getElementById('pagefind-search');
+  
+  let pagefindUI: any = null;
+  
+  async function loadPagefind() {
+    if (pagefindUI) return;
+    
+    try {
+      const Pagefind = await import('@pagefind/default-ui');
+      pagefindUI = new Pagefind.Command({
+        element: '#pagefind-search',
+      });
+    } catch (e) {
+      searchContainer!.innerHTML = '<p class="p-4 text-text-muted">Search index building...</p>';
+    }
+  }
+  
+  function openSearch() {
+    modal?.classList.remove('hidden');
+    document.body.classList.add('search-open');
+    loadPagefind();
+    setTimeout(() => {
+      const input = modal?.querySelector('input');
+      input?.focus();
+    }, 100);
+  }
+  
+  function closeSearch() {
+    modal?.classList.add('hidden');
+    document.body.classList.remove('search-open');
+  }
+  
+  trigger?.addEventListener('click', openSearch);
+  backdrop?.addEventListener('click', closeSearch);
+  
+  document.addEventListener('keydown', (e) => {
+    if (e.key === '/' && !modal?.classList.contains('hidden') === false) {
+      e.preventDefault();
+      openSearch();
+    }
+    if (e.key === 'Escape') {
+      closeSearch();
+    }
+  });
+</script>

@@ -1,0 +1,68 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+
+const posts = (await getCollection("blog"))
+  .filter((post) => !post.data.draft)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const branches = [...new Set(posts.map((post) => post.data.branch))];
+
+const branchCounts = posts.reduce((acc, post) => {
+  acc[post.data.branch] = (acc[post.data.branch] || 0) + 1;
+  return acc;
+}, {} as Record<string, number>);
+
+const branchColors: Record<string, string> = {
+  main: "border-accent-green text-accent-green hover:bg-accent-green/10",
+  frontend: "border-accent-blue text-accent-blue hover:bg-accent-blue/10",
+  backend: "border-accent-purple text-accent-purple hover:bg-accent-purple/10",
+  devops: "border-accent-cyan text-accent-cyan hover:bg-accent-cyan/10",
+};
+
+const branchDescriptions: Record<string, string> = {
+  main: "General topics & miscellaneous",
+  frontend: "UI, client-side development",
+  backend: "Server, APIs, databases",
+  devops: "Infrastructure, deployment, CI/CD",
+};
+---
+
+<BaseLayout title="branches">
+  <div class="mb-10">
+    <div class="flex items-center gap-3 mb-3">
+      <span class="text-accent-green text-xl">$</span>
+      <h1 class="text-2xl font-bold text-text-primary">git branch -a</h1>
+    </div>
+    <p class="text-text-secondary text-lg">Browse commits by category/branch</p>
+  </div>
+
+  <div class="grid gap-6 md:grid-cols-2">
+    {
+      branches.map((branch) => (
+        <a
+          href={`/branches/${branch}`}
+          class={`group p-6 bg-bg-secondary border-2 rounded-lg transition-all ${
+            branchColors[branch] || "border-border text-text-primary"
+          }`}
+        >
+          <div class="flex items-center justify-between">
+            <div>
+              <h2 class="text-xl font-bold">{branch}</h2>
+              <p class="text-text-muted text-sm mt-2">
+                {branchDescriptions[branch] || "Posts in this category"}
+              </p>
+              <p class="text-text-secondary text-sm mt-3">
+                {branchCounts[branch]} commit
+                {branchCounts[branch] !== 1 ? "s" : ""}
+              </p>
+            </div>
+            <span class="text-4xl group-hover:scale-110 transition-transform">
+              ●
+            </span>
+          </div>
+        </a>
+      ))
+    }
+  </div>
+</BaseLayout>

@@ -1,0 +1,85 @@
+---
+title: "Getting Started with PostgreSQL"
+description: "A beginner's guide to PostgreSQL, covering installation, basic queries, and database design fundamentals."
+date: 2026-02-10
+branch: "backend"
+tags: ["postgresql", "database", "sql"]
+hash: "e6f7a8b"
+readingTime: 9
+---
+
+## Introduction to PostgreSQL
+
+PostgreSQL is a powerful, open-source relational database with excellent performance and features.
+
+## Installation
+
+```bash
+# macOS
+brew install postgresql@16
+brew services start postgresql@16
+
+# Ubuntu
+sudo apt install postgresql
+sudo systemctl start postgresql
+```
+
+## Basic Queries
+
+```sql
+-- Create a table
+CREATE TABLE users (
+  id SERIAL PRIMARY KEY,
+  email VARCHAR(255) UNIQUE NOT NULL,
+  name VARCHAR(100),
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Insert data
+INSERT INTO users (email, name)
+VALUES ('user@example.com', 'John Doe');
+
+-- Query with conditions
+SELECT * FROM users
+WHERE created_at > NOW() - INTERVAL '7 days';
+```
+
+## Indexes for Performance
+
+```sql
+-- Create an index
+CREATE INDEX idx_users_email ON users(email);
+
+-- Analyze query performance
+EXPLAIN ANALYZE SELECT * FROM users WHERE email = 'user@example.com';
+```
+
+## Transactions
+
+```sql
+BEGIN;
+
+UPDATE accounts SET balance = balance - 100 WHERE id = 1;
+UPDATE accounts SET balance = balance + 100 WHERE id = 2;
+
+COMMIT;
+-- or ROLLBACK on error
+```
+
+## JSON Support
+
+```sql
+-- Store JSON data
+CREATE TABLE events (
+  id SERIAL PRIMARY KEY,
+  data JSONB NOT NULL
+);
+
+-- Query JSON
+SELECT * FROM events
+WHERE data->>'type' = 'click';
+```
+
+## Conclusion
+
+PostgreSQL is an excellent choice for applications requiring reliability and advanced features.

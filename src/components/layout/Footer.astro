@@ -1,0 +1,19 @@
+---
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="border-t border-border py-6 mt-12">
+  <div class="max-w-4xl mx-auto px-4 text-center text-text-muted text-sm">
+    <p class="font-mono">
+      <span class="text-accent-green">$</span> git log --oneline
+    </p>
+    <p class="mt-2">
+      © {currentYear} commitlog.xyz — All rights reserved
+    </p>
+    <p class="mt-1">
+      <a href="/rss.xml" class="text-text-secondary hover:text-accent-blue">RSS</a>
+      <span class="text-text-muted mx-2">|</span>
+      <a href="https://github.com" class="text-text-secondary hover:text-accent-blue">GitHub</a>
+    </p>
+  </div>
+</footer>

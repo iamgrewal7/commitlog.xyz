@@ -1,0 +1,40 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostMetadata from '../../components/blog/PostMetadata.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: post,
+  }));
+}
+
+const post = Astro.props;
+const { Content } = await post.render();
+---
+
+<BaseLayout title={post.data.title} description={post.data.description}>
+  <article>
+    <PostMetadata
+      title={post.data.title}
+      date={post.data.date}
+      branch={post.data.branch}
+      tags={post.data.tags}
+      hash={post.data.hash}
+      readingTime={post.data.readingTime}
+    />
+    
+    <div class="prose">
+      <Content />
+    </div>
+  </article>
+
+  <nav class="mt-16 pt-8 border-t border-border">
+    <a href="/blog" class="inline-flex items-center gap-2 text-text-secondary hover:text-accent-blue transition-colors">
+      <span>←</span>
+      <span>Back to commit log</span>
+    </a>
+  </nav>
+</BaseLayout>

@@ -1,0 +1,90 @@
+---
+title: "React Performance Optimization Techniques"
+description: "Learn advanced techniques to optimize React application performance, including memoization, code splitting, and virtual DOM optimization."
+date: 2026-02-18
+branch: "frontend"
+tags: ["react", "performance", "optimization"]
+hash: "f4e5d6c"
+readingTime: 10
+---
+
+## Performance Matters
+
+React applications can suffer from performance issues as they grow. Let's explore techniques to keep your app fast and responsive.
+
+## React.memo for Component Memoization
+
+```jsx
+const ExpensiveComponent = React.memo(({ data }) => {
+  return (
+    <div>
+      {data.map(item => (
+        <Item key={item.id} {...item} />
+      ))}
+    </div>
+  );
+});
+```
+
+## useMemo and useCallback
+
+```jsx
+function Dashboard({ items, onItemClick }) {
+  const sortedItems = useMemo(() => {
+    return items.sort((a, b) => b.score - a.score);
+  }, [items]);
+
+  const handleClick = useCallback((id) => {
+    onItemClick(id);
+  }, [onItemClick]);
+
+  return <ItemList items={sortedItems} onClick={handleClick} />;
+}
+```
+
+## Code Splitting with React.lazy
+
+```jsx
+const HeavyComponent = React.lazy(() => import('./HeavyComponent'));
+
+function App() {
+  return (
+    <Suspense fallback={<Loading />}>
+      <HeavyComponent />
+    </Suspense>
+  );
+}
+```
+
+## Virtualization for Large Lists
+
+```jsx
+import { FixedSizeList } from 'react-window';
+
+function VirtualList({ items }) {
+  return (
+    <FixedSizeList
+      height={600}
+      itemCount={items.length}
+      itemSize={50}
+    >
+      {({ index, style }) => (
+        <div style={style}>{items[index].name}</div>
+      )}
+    </FixedSizeList>
+  );
+}
+```
+
+## Profiling Your App
+
+Use React DevTools Profiler to identify bottlenecks:
+
+1. Open Chrome DevTools
+2. Go to the Profiler tab
+3. Record a user interaction
+4. Analyze component render times
+
+## Conclusion
+
+Performance optimization is an ongoing process. Profile regularly and apply these techniques where they matter most.

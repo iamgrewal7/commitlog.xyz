@@ -1,0 +1,53 @@
+---
+interface Props {
+  title: string;
+  date: Date;
+  branch?: string;
+  tags?: string[];
+  hash?: string;
+  readingTime?: number;
+}
+
+const { title, date, branch = 'main', tags = [], hash, readingTime } = Astro.props;
+
+const formattedDate = date.toLocaleDateString('en-US', {
+  weekday: 'short',
+  month: 'short',
+  day: 'numeric',
+  year: 'numeric',
+});
+
+const shortHash = hash || Math.random().toString(16).slice(2, 9);
+---
+
+<div class="bg-bg-secondary border border-border rounded-lg p-6 md:p-8 mb-10">
+  <div class="text-sm text-text-muted mb-3">
+    <span class="text-accent-yellow font-mono">commit {shortHash}</span>
+  </div>
+  <div class="text-text-secondary mb-6 flex flex-wrap gap-x-4 gap-y-2">
+    <span>Author: You</span>
+    <span>Date: {formattedDate}</span>
+    {readingTime && (
+      <span>{readingTime} min read</span>
+    )}
+  </div>
+  <h1 class="text-2xl md:text-4xl font-bold text-text-primary mb-6 leading-tight">
+    {title}
+  </h1>
+  <div class="flex items-center gap-3 flex-wrap">
+    <a
+      href={`/branches/${branch}`}
+      class="px-3 py-1 bg-bg-tertiary rounded text-accent-cyan hover:opacity-80 transition-opacity"
+    >
+      ({branch})
+    </a>
+    {tags.map((tag) => (
+      <a
+        href={`/tags/${tag}`}
+        class="px-3 py-1 bg-bg-tertiary border border-border rounded text-sm text-text-secondary hover:text-text-primary hover:border-text-secondary transition-colors"
+      >
+        {tag}
+      </a>
+    ))}
+  </div>
+</div>

@@ -1,0 +1,74 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import TerminalWindow from '../components/ui/TerminalWindow.astro';
+import CommandPrompt from '../components/ui/CommandPrompt.astro';
+import GitGraph from '../components/blog/GitGraph.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog'))
+  .filter((post) => !post.data.draft)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 5);
+
+const commits = posts.map((post) => ({
+  id: post.id,
+  hash: post.data.hash || post.id.slice(0, 7),
+  title: post.data.title,
+  date: post.data.date,
+  branch: post.data.branch,
+}));
+---
+
+<BaseLayout title="home">
+  <section class="mb-16">
+    <TerminalWindow title="commitlog.xyz">
+      <div class="space-y-4">
+        <CommandPrompt command="whoami" output="Software Engineer & Technical Writer" />
+        <CommandPrompt command="cat mission.txt" output="Sharing knowledge through commit-style technical blog posts. Each article is a commit in the repository of learning." />
+      </div>
+    </TerminalWindow>
+  </section>
+
+  <section class="mb-16">
+    <div class="flex items-center gap-3 mb-8">
+      <span class="text-accent-green">$</span>
+      <h2 class="text-xl font-bold text-text-primary">git log --oneline -5</h2>
+    </div>
+    <GitGraph commits={commits} />
+    <div class="mt-8 text-center">
+      <a href="/blog" class="inline-flex items-center gap-2 px-4 py-2 bg-bg-secondary border border-border rounded-lg text-accent-blue hover:text-accent-cyan hover:border-accent-blue transition-all">
+        <span>View all commits</span>
+        <span>→</span>
+      </a>
+    </div>
+  </section>
+
+  <section>
+    <div class="flex items-center gap-3 mb-8">
+      <span class="text-accent-green">$</span>
+      <h2 class="text-xl font-bold text-text-primary">git branch -a</h2>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+      <a href="/branches/main" class="group p-6 bg-bg-secondary border border-border rounded-lg hover:border-accent-green transition-all">
+        <span class="text-accent-green text-3xl group-hover:scale-110 inline-block transition-transform">●</span>
+        <p class="mt-3 text-text-primary font-semibold">main</p>
+        <p class="text-text-muted text-sm mt-1">General topics</p>
+      </a>
+      <a href="/branches/frontend" class="group p-6 bg-bg-secondary border border-border rounded-lg hover:border-accent-blue transition-all">
+        <span class="text-accent-blue text-3xl group-hover:scale-110 inline-block transition-transform">●</span>
+        <p class="mt-3 text-text-primary font-semibold">frontend</p>
+        <p class="text-text-muted text-sm mt-1">UI & client-side</p>
+      </a>
+      <a href="/branches/backend" class="group p-6 bg-bg-secondary border border-border rounded-lg hover:border-accent-purple transition-all">
+        <span class="text-accent-purple text-3xl group-hover:scale-110 inline-block transition-transform">●</span>
+        <p class="mt-3 text-text-primary font-semibold">backend</p>
+        <p class="text-text-muted text-sm mt-1">Server & APIs</p>
+      </a>
+      <a href="/branches/devops" class="group p-6 bg-bg-secondary border border-border rounded-lg hover:border-accent-cyan transition-all">
+        <span class="text-accent-cyan text-3xl group-hover:scale-110 inline-block transition-transform">●</span>
+        <p class="mt-3 text-text-primary font-semibold">devops</p>
+        <p class="text-text-muted text-sm mt-1">Infrastructure</p>
+      </a>
+    </div>
+  </section>
+</BaseLayout>

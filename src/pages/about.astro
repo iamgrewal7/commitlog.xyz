@@ -1,0 +1,89 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import TerminalWindow from '../components/ui/TerminalWindow.astro';
+---
+
+<BaseLayout title="about">
+  <div class="mb-10">
+    <div class="flex items-center gap-3 mb-3">
+      <span class="text-accent-green text-xl">$</span>
+      <h1 class="text-2xl font-bold text-text-primary">cat about.md</h1>
+    </div>
+    <p class="text-text-secondary">Learn more about this blog and its author</p>
+  </div>
+
+  <TerminalWindow title="about.md">
+    <div class="space-y-6">
+      <div>
+        <h2 class="text-accent-green text-lg font-bold mb-3"># About</h2>
+        <p class="text-text-primary leading-relaxed">
+          Welcome to <span class="text-accent-blue font-semibold">commitlog.xyz</span> — a technical blog 
+          inspired by the beauty of git commit logs.
+        </p>
+        <p class="text-text-primary leading-relaxed mt-3">
+          Every post here is a <span class="text-accent-yellow">commit</span> in the 
+          repository of knowledge. Browse by <span class="text-accent-cyan">branches</span> 
+          (categories) or <span class="text-accent-yellow">tags</span> to find what interests you.
+        </p>
+      </div>
+      
+      <div class="pt-6 border-t border-border">
+        <h2 class="text-accent-green text-lg font-bold mb-3">## Tech Stack</h2>
+        <ul class="text-text-secondary space-y-2">
+          <li class="flex items-center gap-2">
+            <span class="text-accent-cyan">•</span>
+            <span>Astro — Static site generator</span>
+          </li>
+          <li class="flex items-center gap-2">
+            <span class="text-accent-cyan">•</span>
+            <span>MDX — Content authoring</span>
+          </li>
+          <li class="flex items-center gap-2">
+            <span class="text-accent-cyan">•</span>
+            <span>Tailwind CSS — Styling</span>
+          </li>
+          <li class="flex items-center gap-2">
+            <span class="text-accent-cyan">•</span>
+            <span>Shiki — Syntax highlighting</span>
+          </li>
+          <li class="flex items-center gap-2">
+            <span class="text-accent-cyan">•</span>
+            <span>Vercel — Deployment</span>
+          </li>
+        </ul>
+      </div>
+      
+      <div class="pt-6 border-t border-border">
+        <h2 class="text-accent-green text-lg font-bold mb-3">## Connect</h2>
+        <div class="flex gap-6 mt-4">
+          <a href="https://github.com" class="text-accent-blue hover:text-accent-cyan transition-colors">GitHub</a>
+          <a href="https://twitter.com" class="text-accent-blue hover:text-accent-cyan transition-colors">Twitter</a>
+          <a href="https://linkedin.com" class="text-accent-blue hover:text-accent-cyan transition-colors">LinkedIn</a>
+        </div>
+      </div>
+    </div>
+  </TerminalWindow>
+
+  <div class="mt-10">
+    <TerminalWindow title="stats.txt">
+      <div class="grid grid-cols-2 gap-6">
+        <div class="p-3 bg-bg-tertiary rounded">
+          <span class="text-text-muted text-sm">Commits</span>
+          <p class="text-accent-green text-2xl font-bold mt-1">42</p>
+        </div>
+        <div class="p-3 bg-bg-tertiary rounded">
+          <span class="text-text-muted text-sm">Branches</span>
+          <p class="text-accent-cyan text-2xl font-bold mt-1">4</p>
+        </div>
+        <div class="p-3 bg-bg-tertiary rounded">
+          <span class="text-text-muted text-sm">Tags</span>
+          <p class="text-accent-yellow text-2xl font-bold mt-1">15</p>
+        </div>
+        <div class="p-3 bg-bg-tertiary rounded">
+          <span class="text-text-muted text-sm">Contributors</span>
+          <p class="text-accent-purple text-2xl font-bold mt-1">1</p>
+        </div>
+      </div>
+    </TerminalWindow>
+  </div>
+</BaseLayout>
