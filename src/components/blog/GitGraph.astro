@@ -27,23 +27,20 @@ const getBranchColor = (branch: string) => branchColors[branch] || branchColors.
 
 <div class="relative">
   <div class="absolute left-4 top-0 bottom-0 w-0.5 bg-border"></div>
-  <div class="space-y-6">
+  <div class="space-y-4 sm:space-y-6">
     {commits.map((commit) => (
       <a href={`/blog/${commit.id}`} class="relative flex items-start group">
         <div class={`absolute left-2 w-4 h-4 rounded-full ${getBranchColor(commit.branch)} ring-4 ring-bg-primary z-10 group-hover:scale-125 transition-transform`}></div>
-        <div class="ml-12 flex-1 p-4 bg-bg-secondary border border-border rounded-lg group-hover:border-accent-green transition-colors">
-          <div class="flex items-center gap-3 text-sm text-text-muted mb-2">
+        <div class="ml-12 flex-1 p-3 sm:p-4 bg-bg-secondary border border-border rounded-lg group-hover:border-accent-green transition-colors">
+          <div class="flex flex-wrap items-center gap-2 text-xs sm:text-sm text-text-muted mb-2">
             <span class="text-accent-yellow font-mono">{commit.hash}</span>
-            <span>•</span>
+            <span class="hidden sm:inline">•</span>
             <span>{commit.date.toLocaleDateString()}</span>
             {commit.branch !== 'main' && (
-              <>
-                <span>•</span>
-                <span class="text-accent-cyan">({commit.branch})</span>
-              </>
+              <span class="text-accent-cyan">({commit.branch})</span>
             )}
           </div>
-          <h4 class="text-lg text-text-primary group-hover:text-accent-green transition-colors">
+          <h4 class="text-base sm:text-lg text-text-primary group-hover:text-accent-green transition-colors">
             {commit.title}
           </h4>
         </div>

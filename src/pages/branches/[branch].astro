@@ -39,9 +39,9 @@ const branchDescriptions: Record<string, string> = {
   <div class="mb-10">
     <div class="flex items-center gap-3 mb-3">
       <span class="text-accent-green text-xl">$</span>
-      <h1 class="text-2xl font-bold text-text-primary">git log <span class={branchColors[branch] || ''}>{branch}</span></h1>
+      <h1 class="text-xl sm:text-2xl font-bold text-text-primary">git log <span class={branchColors[branch] || ''}>{branch}</span></h1>
     </div>
-    <p class="text-text-secondary text-lg">{branchDescriptions[branch] || 'Posts in this category'}</p>
+    <p class="text-text-secondary">{branchDescriptions[branch] || 'Posts in this category'}</p>
   </div>
 
   <a href="/branches" class="inline-flex items-center gap-2 text-text-secondary hover:text-accent-blue transition-colors mb-8">
@@ -50,14 +50,14 @@ const branchDescriptions: Record<string, string> = {
   </a>
 
   {posts.length > 0 ? (
-    <div class="space-y-6">
+    <div class="space-y-4 sm:space-y-6">
       {posts.map((post) => (
         <CommitCard post={post} />
       ))}
     </div>
   ) : (
     <div class="text-center py-16 text-text-muted">
-      <p class="text-lg">No commits found on this branch.</p>
+      <p>No commits found on this branch.</p>
     </div>
   )}
 </BaseLayout>

@@ -9,10 +9,9 @@ const { post } = Astro.props;
 const { title, description, date, branch, tags, hash } = post.data;
 
 const formattedDate = date.toLocaleDateString('en-US', {
-  weekday: 'short',
-  year: 'numeric',
   month: 'short',
   day: 'numeric',
+  year: 'numeric',
 });
 
 const shortHash = hash || post.id.slice(0, 7);
@@ -20,31 +19,31 @@ const shortHash = hash || post.id.slice(0, 7);
 
 <a href={`/blog/${post.id}`} class="block group">
   <article class="border border-border rounded-lg hover:border-accent-green transition-all duration-200 overflow-hidden">
-    <div class="flex">
-      <div class="flex-shrink-0 w-14 flex items-center justify-center border-r border-border bg-bg-tertiary">
-        <div class="w-4 h-4 rounded-full bg-accent-green group-hover:animate-pulse"></div>
+    <div class="flex flex-col sm:flex-row">
+      <div class="flex-shrink-0 w-full sm:w-14 flex items-center gap-3 sm:flex-col sm:justify-center p-4 sm:p-0 sm:border-r border-b sm:border-b-0 border-border bg-bg-tertiary">
+        <div class="w-3 h-3 rounded-full bg-accent-green group-hover:animate-pulse"></div>
+        <span class="text-xs text-accent-yellow font-mono sm:hidden">commit {shortHash}</span>
       </div>
-      <div class="flex-1 p-5">
-        <div class="text-sm text-text-muted mb-2">
+      <div class="flex-1 p-4 sm:p-5">
+        <div class="text-sm text-text-muted mb-2 hidden sm:block">
           <span class="text-accent-yellow font-mono">commit {shortHash}</span>
         </div>
-        <h3 class="text-xl font-semibold text-text-primary group-hover:text-accent-green transition-colors">
+        <h3 class="text-lg sm:text-xl font-semibold text-text-primary group-hover:text-accent-green transition-colors">
           {title}
         </h3>
-        <p class="text-text-secondary mt-2 line-clamp-2 leading-relaxed">
+        <p class="text-text-secondary mt-2 line-clamp-2 leading-relaxed text-sm sm:text-base">
           {description}
         </p>
-        <div class="flex items-center gap-4 mt-4 text-sm text-text-muted">
-          <span>Author: You</span>
-          <span>Date: {formattedDate}</span>
+        <div class="flex flex-wrap items-center gap-2 sm:gap-4 mt-3 sm:mt-4 text-xs sm:text-sm text-text-muted">
+          <span>{formattedDate}</span>
           {branch && (
             <span class="text-accent-cyan">({branch})</span>
           )}
         </div>
         {tags && tags.length > 0 && (
-          <div class="flex gap-2 mt-3">
+          <div class="flex flex-wrap gap-2 mt-3">
             {tags.map((tag: string) => (
-              <span class="px-2.5 py-1 bg-bg-tertiary rounded text-sm text-text-secondary">
+              <span class="px-2 py-0.5 bg-bg-tertiary rounded text-xs text-text-secondary">
                 {tag}
               </span>
             ))}
